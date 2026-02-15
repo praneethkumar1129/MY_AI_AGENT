@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os, requests
@@ -20,7 +19,6 @@ users_collection = db.users
 chats_collection = db.chats
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,12 +27,8 @@ app.add_middleware(
 )
 
 @app.get("/")
-async def serve_login():
-    return FileResponse("login.html")
-
-@app.get("/chat")
-async def serve_chat():
-    return FileResponse("index.html")
+async def root():
+    return {"message": "Bujji AI API is running", "status": "ok"}
 
 @app.get("/api/health")
 async def health():
